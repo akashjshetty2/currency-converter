@@ -51,3 +51,27 @@ convertBtn.addEventListener("click", () => {
     })
     .catch((error) => console.log(error));
 });
+
+// Exchange rate functionality
+getRatesBtn.addEventListener("click", () => {
+  const base = baseCurrency.value;
+  fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/${base}`)
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      let ratesHtml = "<h3>Exchanges Rates</h3><ul>";
+      for (const [currency, rate] of Object.entries(data.conversion_rates)) {
+        if (currency !== base) {
+          ratesHtml += `<li><span class="currency-icon"></span>${currency}:${rate.toFixed(
+            4
+          )}</li>`;
+        }
+      }
+      ratesHtml += "</ul>";
+      exchangeRates.innerHTML = ratesHtml;
+    })
+    .catch((error) => {
+      exchangeRates.textContent = "An error occoured.Please try again.";
+    });
+});
