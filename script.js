@@ -16,7 +16,7 @@ const exchangeMode = document.getElementById("exchange-mode");
 const toggleBtns = document.querySelectorAll(".toggle-btn");
 
 // Define the API key
-const apiKey = "dcd09976209b45151b4dea3e430babd9";
+const apiKey = "6890ca79f983eb159d1ee039";
 
 // Adding the eventlisteners to the toggle buttons
 toggleBtns.forEach((btn) => {
@@ -32,4 +32,22 @@ toggleBtns.forEach((btn) => {
       convertMode.style.display = "none";
     }
   });
+});
+
+// Implementing the currency converting functionality and fetching the API and display the result
+convertBtn.addEventListener("click", () => {
+  const amount = amountInput.value;
+  const from = fromCurrency.value;
+  const to = toCurrency.value;
+
+  fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/pair/${from}/${to}`)
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      const rate = data.conversion_rate;
+      const convertedAmount = (amount * rate).toFixed(2);
+      result.innerHTML = `<span class="currency-icon"></span>${convertedAmount} ${to}`;
+    })
+    .catch((error) => console.log(error));
 });
